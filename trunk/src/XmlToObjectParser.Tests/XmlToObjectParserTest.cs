@@ -9,8 +9,9 @@ namespace XmlToObjectParser.Tests
     public class XmlToObjectParserTest
     {
         private string _sampleXml = String.Empty;
-        
-        [SetUp]
+    	
+
+    	[SetUp]
         public void Setup()
         {
             _sampleXml = @"<?xml version=""1.0"" encoding=""ISO-8859-1""?>
@@ -31,6 +32,7 @@ namespace XmlToObjectParser.Tests
                                 <price>9.90</price>
                               </cd>
                             </catalog>";
+       
         }
         
         [Test]
@@ -70,5 +72,21 @@ namespace XmlToObjectParser.Tests
             
             Assert.True(true);
         }
+
+    	[Test]
+    	public void can_parse_xml_with_dotted_name_element()
+    	{
+			 	var xml = @"<?xml version=""1.0"" encoding=""ISO-8859-1""?>
+                            <catalog>
+                              <dbo.cd country=""USA"">
+                                <title>Empire Burlesque</title>
+                                <artist>Bob Dylan</artist>
+                                <price>10.90</price>
+                              </dbo.cd>                              
+                            </catalog>";
+    		var catalog = XmlToObjectParser.ParseFromXml(xml);
+    		string title = catalog.catalog.dbo_cd.title;
+			Assert.AreEqual(title, "Empire Burlesque");
+    	}
     }
 }
